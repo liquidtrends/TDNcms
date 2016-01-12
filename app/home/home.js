@@ -10,31 +10,45 @@ angular.module('myApp.home', ['ngRoute','firebase'])
 }])
 
 .controller('HomeCtrl', ['$scope','$location','CommonProp','$firebaseAuth',function($scope,$location,CommonProp,$firebaseAuth) {
-    var firebaseObj = new Firebase("tdn.firebaseio.com");
+ 
+
+
+ var firebaseObj = new Firebase("https://tdn.firebaseio.com");
     var loginObj = $firebaseAuth(firebaseObj);
 
-    $scope.user = {};
-    var login = {};
+    loginObj.$onAuth(function(authData) {
+    if(authData){
+        CommonProp.setUser(authData.password.email);
+        $location.path('/dashboard');
+    }
+ });
+  
+  $scope.user = {};
+  var login={};
 
-$scope.login = login;
-    $scope.SignIn = function(e) {
-        login.loading = true;
-        e.preventDefault();
-        var username = $scope.user.email;
-        var password = $scope.user.password;
-        loginObj.$authWithPassword({
-                email: username,
-                password: password
-            })
+$scope.test = function(){
+    login.loading = true;
+}
+
+$scope.login=login;
+  $scope.SignIn = function(e) {
+    login.loading = true;
+    e.preventDefault();
+    var username = $scope.user.email;
+    var password = $scope.user.password;
+    loginObj.$authWithPassword({
+            email: username,
+            password: password
+        })
         .then(function(user) {
-            login.loading = false;
             //Success callback
+        login.loading = false;
             console.log('Authentication successful');
     CommonProp.setUser(user.password.email);
         $location.path('/dashboard');
         }, function(error) {
             //Failure callback
-            login.loading = false;
+        login.loading = false;
             console.log('Authentication failure');
         });
 }
@@ -63,7 +77,6 @@ $scope.login = login;
         }
     };
 }])
-
 .directive('laddaLoading', [
     function() {
         return {
