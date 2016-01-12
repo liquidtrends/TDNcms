@@ -12,23 +12,29 @@ angular.module('myApp.home', ['ngRoute','firebase'])
 .controller('HomeCtrl', ['$scope','$location','CommonProp','$firebaseAuth',function($scope,$location,CommonProp,$firebaseAuth) {
     var firebaseObj = new Firebase("tdn.firebaseio.com");
     var loginObj = $firebaseAuth(firebaseObj);
-  
-  $scope.user = {};
-  $scope.SignIn = function(e) {
-    e.preventDefault();
-    var username = $scope.user.email;
-    var password = $scope.user.password;
-    loginObj.$authWithPassword({
-            email: username,
-            password: password
-        })
+
+    $scope.user = {};
+    var login = {};
+
+$scope.login = login;
+    $scope.SignIn = function(e) {
+        login.loading = true;
+        e.preventDefault();
+        var username = $scope.user.email;
+        var password = $scope.user.password;
+        loginObj.$authWithPassword({
+                email: username,
+                password: password
+            })
         .then(function(user) {
+            login.loading = false;
             //Success callback
             console.log('Authentication successful');
-  CommonProp.setUser(user.password.email);
-    $location.path('/dashboard');
+    CommonProp.setUser(user.password.email);
+        $location.path('/dashboard');
         }, function(error) {
             //Failure callback
+            login.loading = false;
             console.log('Authentication failure');
         });
 }
@@ -44,4 +50,23 @@ angular.module('myApp.home', ['ngRoute','firebase'])
             user = value;
         }
     };
-});
+})
+.directive('laddaLoading', [
+    function() {
+        return {
+            link: function(scope, element, attrs) {
+                var Ladda = window.Ladda;
+                var ladda = Ladda.create(element[0]);
+                // Watching login.loading for change
+                scope.$watch(attrs.laddaLoading, function(newVal, oldVal) {
+                    // if true show loading indicator
+                    if (newVal) {
+                        ladda.start();
+                    } else {
+                        ladda.stop();
+                    }
+                });
+            }
+        };
+    }
+]);

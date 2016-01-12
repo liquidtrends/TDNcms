@@ -27,7 +27,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
     var job = $firebase(fb);
     job.$update({
         title: $scope.jobToUpdate.title,
-        description: $scope.jobToUpdate.post,
+        description: $scope.jobToUpdate.description,
         emailId: $scope.jobToUpdate.emailId
     }).then(function(ref) {
         $('#editModal').modal('hide');
