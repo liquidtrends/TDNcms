@@ -10,19 +10,27 @@ angular.module('myApp.addJob', ['ngRoute'])
 }])
 
 .controller('AddJobCtrl', ['$scope','$firebase','$location','CommonProp',function($scope,$firebase,$location,CommonProp) {
+    $scope.logout = function() {
+      CommonProp.logoutUser();
+    }
+    $scope.username = CommonProp.getUser();
+
+    if(!CommonProp.getUser()){
+      $location.path('/home');
+    }
+
     $scope.AddJob = function(){
-  var title = $scope.job.title;
+    var title = $scope.job.title;
         var description = $scope.job.description;
   
-  var firebaseObj = new Firebase("https://tdn.firebaseio.com/Jobs");
+    var firebaseObj = new Firebase("https://tdn.firebaseio.com/Jobs");
       var fb = $firebase(firebaseObj);
-
   fb.$push({ title: title,description: description,emailId: CommonProp.getUser() }).then(function(ref) {
       console.log(ref); 
     $location.path('/dashboard');
   }, function(error) {
       console.log("Error:", error);
-  });
+    });
+  }
 
-    }
 }]);

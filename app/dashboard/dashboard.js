@@ -9,12 +9,23 @@ angular.module('myApp.dashboard', ['ngRoute'])
     });
 }])
 
-.controller('DashboardCtrl', ['$scope','$firebase','CommonProp', function($scope,$firebase,CommonProp) {
+.controller('DashboardCtrl', ['$scope','$firebase','$location','CommonProp', function($scope,$firebase,$location,CommonProp) {
+  
+  $scope.username = CommonProp.getUser();
+
+  if(!$scope.username){
+    $location.path('/home');
+  }
+
   $scope.username = CommonProp.getUser();
   var firebaseObj = new Firebase("https://tdn.firebaseio.com/Jobs");
   var sync = $firebase(firebaseObj);
   $scope.jobs = sync.$asArray();
   
+  $scope.logout = function() {
+    CommonProp.logoutUser();
+  }
+
   $scope.editJob = function(id) {
     var firebaseObj = new Firebase("https://tdn.firebaseio.com/Jobs/" + id);
     var syn = $firebase(firebaseObj);

@@ -39,18 +39,31 @@ $scope.login = login;
         });
 }
 }])
-.service('CommonProp', function() {
+.service('CommonProp',['$location','$firebaseAuth',function($location,$firebaseAuth) {
     var user = '';
- 
+    var firebaseObj = new Firebase("https://tdn.firebaseio.com");
+    var loginObj = $firebaseAuth(firebaseObj);
+  
     return {
         getUser: function() {
+            if(user == ''){
+                user = localStorage.getItem('userEmail');
+            }
             return user;
         },
         setUser: function(value) {
-            user = value;
+            localStorage.setItem("userEmail", value);
+            user = value;    
+        },
+        logoutUser:function(){
+            loginObj.$unauth();
+            user='';
+            localStorage.removeItem('userEmail');
+            $location.path('/home');
         }
     };
-})
+}])
+
 .directive('laddaLoading', [
     function() {
         return {
