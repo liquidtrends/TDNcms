@@ -1,0 +1,75 @@
+<html lang="en">
+ 
+<head>
+ 
+    <title></title>
+ 
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+    <link href="blog.css" rel="stylesheet">
+ 
+ 
+</head>
+ 
+<body ng-controller="AddJobCtrl">
+ 
+    <div class="blog-masthead">
+        <div class="container">
+            <nav class="blog-nav">
+                <a class="blog-nav-item " href="#">Home</a>
+                <a class="blog-nav-item active" href="addJob.html">Add Post</a>
+ 
+            </nav>
+        </div>
+    </div>
+ 
+    <div class="container">
+ 
+        <form class="form-horizontal" ng-submit="AddJob()">
+            <fieldset>
+ 
+                <!-- Form Name -->
+                <legend>Create Job</legend>
+ 
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="txtTitle">Job Title</label>
+                    <div class="col-md-4">
+                        <input id="txtTitle" name="txtTitle" ng-model="job.title" type="text" placeholder="placeholder" class="form-control input-md">
+                    </div>
+                </div>
+ 
+                <!-- Textarea -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="txtPost">Job Description</label>
+                    <div class="col-md-4">
+                        <textarea class="form-control" id="txtPost" ng-model="job.description" name="txtPost" ></textarea>
+
+                    </div>
+                </div>
+ 
+                <!-- Button -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="singlebutton"></label>
+                    <div class="col-md-4">
+                        <input id="singlebutton" ng-disabled="!job.title || !job.description" name="singlebutton" class="btn btn-primary" type="submit" value="Publish" />
+                    </div>
+                </div>
+ 
+            </fieldset>
+        </form>
+ 
+ 
+    </div>
+    <!-- /.container -->
+ 
+    <div class="blog-footer">
+        <p>AngularJS & Firebase Blog App</p>
+ 
+    </div>
+ 
+ 
+ 
+</body>
+ 
+</html>
